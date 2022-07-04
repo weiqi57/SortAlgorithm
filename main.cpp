@@ -86,16 +86,22 @@ public:
     }
 
     void quickSort(vector<int> &nums, int left, int right) {
+        // 当left==right即对一个元素没必要进行排序，无需处理
         if (left < right) {
             int pivot = partition(nums, left, right);
             quickSort(nums, left, pivot - 1);
             quickSort(nums, pivot + 1, right);
         }
-//        showArrays(nums);
+        showArrays(nums);
     }
 
     int partition(vector<int> &nums, int left, int right) {
+        //! 选择nums[left]作为枢纽元素
         int pivot = nums[left];
+        //! 随机选择一个元素作为枢纽元素
+//        int randIndex = rand() % (right - left + 1) + left;
+//        int pivot = nums[randIndex];
+        // 注意此处循环条件为left<right，而不是left<=right
         while (left < right) {
             while (left < right && nums[right] >= pivot) {
                 right--;
@@ -107,9 +113,9 @@ public:
             nums[right] = nums[left];
         }
         nums[left] = pivot;
-//        showArrays(nums);
         return left;
     }
+
 
     void quickSort2(vector<int> &nums, int low, int high) {
         if (low >= high) {
@@ -368,15 +374,15 @@ int main() {
 //    cout << "BubbleSort:\n";
 //    s.bubbleSort(nums);
 
-//    cout << "QuickSort:\n";
-//    s.quickSort(nums, 0, nums.size() - 1);
+    cout << "QuickSort:\n";
+    s.quickSort(nums, 0, nums.size() - 1);
 //    s.quickSort2(nums2, 0, nums.size() - 1);
 
 //    cout << "selectionSort:\n";
 //    s.selectionSort(nums);
 
-//    cout << "HeapSort:\n";
-//    s.heapSort(nums);
+    cout << "HeapSort:\n";
+    s.heapSort(nums);
 
 //    Solution::showArrays(nums);
 
