@@ -96,11 +96,7 @@ public:
     }
 
     int partition(vector<int> &nums, int left, int right) {
-        //! 选择nums[left]作为枢纽元素
         int pivot = nums[left];
-        //! 随机选择一个元素作为枢纽元素
-//        int randIndex = rand() % (right - left + 1) + left;
-//        int pivot = nums[randIndex];
         // 注意此处循环条件为left<right，而不是left<=right
         while (left < right) {
             while (left < right && nums[right] >= pivot) {
@@ -162,28 +158,27 @@ public:
         buildHeap(nums);
         for (int i = n - 1; i >= 0; i--) {
             swap(nums[0], nums[i]);
-            heapify(nums, i, 0);
+            heapify(nums, i-1, 0);
         }
         showArrays(nums);
     }
 
     // 从第index个结点开始，不断往下重复调整堆，使其成为大根堆
     void heapify(vector<int> &nums, int n, int currIndex) {
-        if (currIndex >= n) {
+        if (currIndex > n) {
             return;
         }
-
         // 左孩子
-        int lChild = (2 * currIndex) + 1;
+        int leftChildIndex = (2 * currIndex) + 1;
         // 右孩子
-        int rChild = (2 * currIndex) + 2;
+        int rightChildIndex = (2 * currIndex) + 2;
         int maxIndex = currIndex;
 
-        if (lChild < n && nums[lChild] > nums[maxIndex]) {
-            maxIndex = lChild;
+        if (leftChildIndex <= n && nums[leftChildIndex] > nums[maxIndex]) {
+            maxIndex = leftChildIndex;
         }
-        if (rChild < n && nums[rChild] > nums[maxIndex]) {
-            maxIndex = rChild;
+        if (rightChildIndex <= n && nums[rightChildIndex] > nums[maxIndex]) {
+            maxIndex = rightChildIndex;
         }
 
         if (maxIndex != currIndex) {
@@ -193,17 +188,16 @@ public:
     }
 
     void buildHeap(vector<int> &nums) {
-        int n = nums.size();
-        int lastIndex = n - 1;
-        int parentIndex = (lastIndex - 1) / 2;
+        int lastNodeIndex = nums.size() - 1;
+        int lastParentIndex = (lastNodeIndex - 1) / 2;
 
-        for (int i = parentIndex; i >= 0; i--) {
-            heapify(nums, n, i);
+        for (int i = lastParentIndex; i >= 0; i--) {
+            heapify(nums, nums.size()-1, i);
         }
     }
 
     void mergeSort(vector<int> &nums, int low, int high) {
-        // 当low==high时，即数组只有一个元素，即为有序的，开始归并的“并”的部分
+        // 当low==high时，即数组只有一个元素，为有序的，开始归并的“并”的部分
         if (low < high) {
             int mid = low + (high - low) / 2;
             mergeSort(nums, low, mid);
@@ -218,21 +212,18 @@ public:
 
         // 数组[low:mid]和[mid+1,high]之间的元素都是有序的
         int i = low, j = mid + 1;
-        int k = i;
+        //! 注意此处结果数组的索引不能初始化为0
+        int resIndex = i;
         while (i <= mid && j <= high) {
             if (copyNums[i] <= copyNums[j]) {
-                nums[k] = copyNums[i];
-                i++;
-                k++;
+                nums[resIndex++] = copyNums[i++];
             } else {
-                nums[k] = copyNums[j];
-                j++;
-                k++;
+                nums[resIndex++] = copyNums[j++];
             }
         }
         // 一边数组已经遍历插入完成，另外一边数组无需比较之间附到顺序数组后方即可
-        while (i <= mid) nums[k++] = copyNums[i++];
-        while (j <= high) nums[k++] = copyNums[j++];
+        while (i <= mid) nums[resIndex++] = copyNums[i++];
+        while (j <= high) nums[resIndex++] = copyNums[j++];
     }
 
     void countSort(vector<int> nums) {
@@ -374,8 +365,8 @@ int main() {
 //    cout << "BubbleSort:\n";
 //    s.bubbleSort(nums);
 
-    cout << "QuickSort:\n";
-    s.quickSort(nums, 0, nums.size() - 1);
+//    cout << "QuickSort:\n";
+//    s.quickSort(nums, 0, nums.size() - 1);
 //    s.quickSort2(nums2, 0, nums.size() - 1);
 
 //    cout << "selectionSort:\n";
@@ -386,8 +377,8 @@ int main() {
 
 //    Solution::showArrays(nums);
 
-//    cout << "MergeSort:\n";
-//    s.mergeSort(nums3, 0, nums.size() - 1);
+    cout << "MergeSort:\n";
+    s.mergeSort(nums3, 0, nums.size() - 1);
 
 //    cout << "ShowArray:\n";
 //    Solution::showArrays(nums);
